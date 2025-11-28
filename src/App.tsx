@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { useBinancePrices } from "./hooks/useBinancePrices";
+import TickerList from "./components/TickerList";
+import RealTimeChart from "./components/RealTimeChart";
+
+const tickers = ["btcusdt", "ethusdt", "bnbusdt", "adausdt", "xrpusdt"];
+// src/constants/tickers.ts
+
+import "./App.css";
+import BTCPrice from "./components/BTCPrice";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selected, setSelected] = useState(tickers[0]);
+  const prices = useBinancePrices(tickers);
+  const selectedPrice = prices.find((p) => p.symbol === selected);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={{ display: "flex", padding: "20px", gap: "20px" }}>
+      <div style={{ width: "200px" }}>
+        <TickerList
+          prices={prices}
+          selected={selected}
+          onSelect={setSelected}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div style={{ flex: 1 }}>
+        <RealTimeChart price={selectedPrice} />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+    // <BTCPrice />
+  );
 }
 
-export default App
+export default App;
