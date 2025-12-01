@@ -1,34 +1,72 @@
-import { useState } from "react";
-import { useBinancePrices } from "./hooks/useBinancePrices";
-import TickerList from "./components/TickerList";
-import RealTimeChart from "./components/RealTimeChart";
+// src/App.tsx
+import { Container, Grid } from "@mui/material"
+import TopTickers from "./components/TopTickers"
+import CryptoChart from "./components/CryptoChart"
+import Watchlist from "./components/Watchlist"
+import { useState } from "react"
+import { useBinanceTicker } from "./hooks/useBinanceTicker"
+import Dashboard from "./components/Dashboard"
+import CandleStickChart from "./components/CandleStickChart"
+import type { PopularPairKeys } from "./constants"
 
-const tickers = ["btcusdt", "ethusdt", "bnbusdt", "adausdt", "xrpusdt"];
-// src/constants/tickers.ts
+const allSymbols = [
+  "BTCUSDT",
+  "ETHUSDT",
+  "BNBUSDT",
+  "XRPUSDT",
+  "ADAUSDT",
+  "SOLUSDT",
+  "DOGEUSDT",
+  "AVAXUSDT",
+  "DOTUSDT",
+  "LTCUSDT",
+  "TRXUSDT",
+  "LINKUSDT",
+  "ATOMUSDT",
+  "ETCUSDT",
+]
 
-import "./App.css";
-import BTCPrice from "./components/BTCPrice";
-
-function App() {
-  const [selected, setSelected] = useState(tickers[0]);
-  const prices = useBinancePrices(tickers);
-  const selectedPrice = prices.find((p) => p.symbol === selected);
+export default function App() {
+  const tickers = useBinanceTicker(allSymbols)
+  const [selectedTicker, setSelected] = useState("BTCUSDT")
 
   return (
-    <div style={{ display: "flex", padding: "20px", gap: "20px" }}>
-      <div style={{ width: "200px" }}>
-        <TickerList
-          prices={prices}
-          selected={selected}
-          onSelect={setSelected}
-        />
-      </div>
-      <div style={{ flex: 1 }}>
-        <RealTimeChart price={selectedPrice} />
-      </div>
-    </div>
-    // <BTCPrice />
-  );
-}
+    <Container sx={{ py: 4 }}>
+      {/* TOP CARDS */}
 
-export default App;
+      <Grid container spacing={3} mt={1}>
+        <TopTickers
+          tickers={tickers}
+          onSelect={setSelected}
+          selectedTicker={selectedTicker}
+        />
+        {/* <Grid size={{ xs: 12, sm: 8, lg: 12 }}>
+          <Dashboard selectedTicker={selectedTicker} />
+        </Grid> */}
+        <Grid size={{ xs: 12, sm: 12, lg: 8 }}>
+          <CandleStickChart
+            symbol={selectedTicker}
+            // contractType="current_quarter"
+            // interval="1m"
+          />
+        </Grid>
+        {/* LEFT CHART */}
+        {/* <Grid size={{ xs: 12, sm: 8, lg: 8 }}>
+          <CryptoChart
+            selected={selectedTicker}
+            price={tickers[selectedTicker]?.price}
+          />
+        </Grid> */}
+
+        {/* RIGHT WATCHLIST */}
+        <Grid size={{ xs: 12, sm: 4, lg: 4 }}>
+          <Watchlist
+            tickers={tickers}
+            onSelect={setSelected}
+            selectedTicker={selectedTicker}
+          />
+        </Grid>
+      </Grid>
+    </Container>
+  )
+}
