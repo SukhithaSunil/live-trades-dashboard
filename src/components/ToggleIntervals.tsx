@@ -25,6 +25,7 @@ const ToggleIntervals: React.FC<ToggleIntervalsProps> = ({
       exclusive
       onChange={handleAlignment}
       aria-label="OHLC Interval"
+      sx={{ my: 2 }}
     >
       {INTERVALS.map((time) => (
         <ToggleButton key={time} value={time} aria-label={time}>

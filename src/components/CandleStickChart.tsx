@@ -189,7 +189,6 @@ const CandlestickChart: React.FC<CandleStickChartProps> = ({ symbol }) => {
       <Typography variant="subtitle1" gutterBottom>
         {symbol} — {selectedInterval} — Live Candlestick Chart (TypeScript)
       </Typography>
-
       <ToggleIntervals interval={selectedInterval} setInterval={setInterval} />
       <Chart
         options={options}

@@ -48,7 +48,7 @@ export const darkTheme = createTheme({
       styleOverrides: {
         root: {
           // backgroundColor: "#0e265aff",
-          backgroundColor: "#132344",
+          backgroundColor: "#0a1b30ff",
 
           borderRadius: 12,
           backgroundImage: "none",
@@ -86,7 +86,8 @@ export const darkTheme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          backgroundColor: "#2c364cff",
+          backgroundColor: "#132344",
+
           borderRadius: 12,
           border: "1px solid rgba(255,255,255,0.06)",
         },
@@ -113,6 +114,7 @@ export const darkTheme = createTheme({
           textTransform: "none",
           "&:hover": {
             backgroundColor: "#162447",
+            border: "#25375bff",
           },
           "&.Mui-selected": {
             backgroundColor: "#25375bff",

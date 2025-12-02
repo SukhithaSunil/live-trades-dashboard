@@ -46,3 +46,20 @@ export const INTERVALS = [
   "1w",
 ] as const
 export type Interval = (typeof INTERVALS)[number]
+export interface PriceThreshold {
+  [symbol: string]: {
+    above?: number
+    below?: number
+  }
+}
+export const THRESHOLDS: PriceThreshold = {
+  BTCUSDT: { above: 86200, below: 86600 },
+  ETHUSDT: { above: 2500 },
+}
+export interface PriceAlert {
+  status: "success" | "info" | "warning" | "error"
+  ticker: string
+}
+export interface PriceAlertData extends PriceAlert {
+  open?: boolean
+}
