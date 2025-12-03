@@ -35,7 +35,6 @@ export const watchSymbols: WatchPairKeys[] = [
   "ETCUSDT",
 ]
 export const INTERVALS = [
-  "1m",
   "5m",
   "30m",
   "1h",
