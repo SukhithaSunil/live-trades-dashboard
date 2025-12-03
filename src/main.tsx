@@ -47,11 +47,8 @@ export const darkTheme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          // backgroundColor: "#0e265aff",
           backgroundColor: "#0a1b30ff",
-
           borderRadius: 12,
-          backgroundImage: "none",
           border: "1px solid rgba(255,255,255,0.05)",
         },
       },
@@ -69,17 +66,6 @@ export const darkTheme = createTheme({
           "&:hover": {
             backgroundColor: "#374b6eff", // hover surface
           },
-
-          "&.Mui-selected": {
-            backgroundColor: "#153041ff", // selected item
-            "&:hover": {
-              backgroundColor: "#1B2435",
-            },
-          },
-
-          "&.Mui-disabled": {
-            color: "rgba(234,236,239,0.28)",
-          },
         },
       },
     },
@@ -87,9 +73,14 @@ export const darkTheme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#132344",
-
           borderRadius: 12,
           border: "1px solid rgba(255,255,255,0.06)",
+          "&:hover": {
+            backgroundColor: "#374b6eff", // hover surface
+          },
+          "&.Mui-selected": {
+            backgroundColor: "#374b6eff", // hover surface
+          },
         },
       },
     },

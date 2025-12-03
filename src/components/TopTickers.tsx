@@ -33,7 +33,12 @@ export default function TopTickers({
 
         return (
           <Grid key={sym} size={{ xs: 6, sm: 3, lg: 3 }}>
-            <Card>
+            <Card
+              sx={{
+                backgroundColor:
+                  selectedTicker === sym ? "#374b6eff" : "#132344",
+              }}
+            >
               <CardActionArea
                 onClick={() => onSelect(sym)}
                 data-active={selectedTicker === sym ? "" : undefined}

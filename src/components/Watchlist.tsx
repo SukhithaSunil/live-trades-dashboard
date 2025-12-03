@@ -57,7 +57,15 @@ export default function Watchlist({
           const up = t?.changePct > 0
 
           return (
-            <ListItem key={sym} onClick={() => onSelect(sym)} sx={{ my: 2 }}>
+            <ListItem
+              key={sym}
+              onClick={() => onSelect(sym)}
+              sx={{
+                my: 2,
+                backgroundColor:
+                  selectedTicker === sym ? "#374b6eff" : "#132344",
+              }}
+            >
               <ListItemButton>
                 <ListItemText
                   primary={
