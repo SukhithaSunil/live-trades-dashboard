@@ -16,7 +16,9 @@
     "@mui/material": "^7.3.5",
     "apexcharts": "^5.3.6",
     "chart.js": "^4.5.1",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-chart-financial": "^0.2.1",
+    "date-fns": "^4.1.0",
     "notistack": "^3.0.2",
     "react": "^19.2.0",
     "react-apexcharts": "^1.8.0",
@@ -26,6 +28,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/chart.js": "^2.9.41",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
