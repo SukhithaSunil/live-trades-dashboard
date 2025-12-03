@@ -1,50 +1,48 @@
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward"
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"
 import {
   Card,
+  CardActionArea,
   CardContent,
   Chip,
   Grid,
+  Skeleton,
   Stack,
   Typography,
-  Skeleton,
-  CardActionArea,
 } from "@mui/material"
-import type { TickerData } from "../hooks/useBinanceTicker"
-import { formatPrice, formatPercent } from "../utill"
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward"
-import { PopularPairs, popularTickers } from "../constants"
+import { popularTickers, TickerPairs } from "../constants"
+import type { TickerStreamDataMap, TickerSymbol } from "../types"
+import { formatPercent, formatPrice } from "../utill"
 
-interface Props {
-  tickers: Record<string, TickerData>
-  onSelect: (sym: string) => void
-  selectedTicker: string
+interface PopularTickersProps {
+  tickersLiveStream: TickerStreamDataMap
+  onSelect: (sym: TickerSymbol) => void
+  selectedTicker: TickerSymbol
 }
 
-export default function TopTickers({
-  tickers,
+export const PopularTickers: React.FC<PopularTickersProps> = ({
+  tickersLiveStream,
   onSelect,
   selectedTicker,
-}: Props) {
+}) => {
   return (
     <>
-      {popularTickers.map((sym) => {
-        const t = tickers[sym]
-        const up = t?.changePct > 0
-
+      {popularTickers.map((ticket) => {
+        const tickerData = tickersLiveStream[ticket]
+        const up = (tickerData?.changePct ?? 0) > 0
         return (
-          <Grid key={sym} size={{ xs: 6, sm: 3, lg: 3 }}>
+          <Grid key={ticket} size={{ xs: 6, sm: 3, lg: 3 }}>
             <Card
               sx={{
                 backgroundColor:
-                  selectedTicker === sym ? "#374b6eff" : "#132344",
+                  selectedTicker === ticket ? "#374b6eff" : "#132344",
               }}
             >
               <CardActionArea
-                onClick={() => onSelect(sym)}
-                data-active={selectedTicker === sym ? "" : undefined}
+                onClick={() => onSelect(ticket)}
                 sx={{
                   backgroundColor:
-                    selectedTicker === sym ? "action.selected" : "inherit",
+                    selectedTicker === ticket ? "action.selected" : "inherit",
                 }}
               >
                 <CardContent
@@ -64,18 +62,15 @@ export default function TopTickers({
                       gap: { xs: 1 },
                     }}
                   >
-                    {/* Symbol */}
                     <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                      {PopularPairs[sym]}
+                      {TickerPairs[ticket]}
                     </Typography>
-
-                    {/* Percent change chip OR skeleton */}
-                    {t ? (
+                    {tickerData ? (
                       <Chip
                         size="small"
                         icon={up ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />}
                         color={up ? "success" : "error"}
-                        label={formatPercent(t.changePct)}
+                        label={formatPercent(tickerData.changePct)}
                       />
                     ) : (
                       <Skeleton
@@ -87,10 +82,9 @@ export default function TopTickers({
                     )}
                   </Stack>
 
-                  {/* Price */}
-                  {t ? (
+                  {tickerData ? (
                     <Typography variant="h6" color="darksalmon" sx={{ mt: 1 }}>
-                      {t.price}
+                      {tickerData.price}
                     </Typography>
                   ) : (
                     <Skeleton
@@ -100,14 +94,11 @@ export default function TopTickers({
                       animation="wave"
                     />
                   )}
-
-                  {/* Details grid (hidden on xs) */}
                   <Grid
                     container
                     spacing={2}
                     sx={{ display: { xs: "none", sm: "flex" }, mt: 1 }}
                   >
-                    {/* High */}
                     <Grid>
                       <Stack>
                         <Typography
@@ -117,17 +108,15 @@ export default function TopTickers({
                           24h High
                         </Typography>
 
-                        {t ? (
+                        {tickerData ? (
                           <Typography variant="caption">
-                            {formatPrice(t.high, t.symbol)}
+                            {formatPrice(tickerData.high, tickerData.symbol)}
                           </Typography>
                         ) : (
                           <Skeleton width={60} height={16} />
                         )}
                       </Stack>
                     </Grid>
-
-                    {/* Low */}
                     <Grid>
                       <Stack>
                         <Typography
@@ -137,9 +126,9 @@ export default function TopTickers({
                           24h Low
                         </Typography>
 
-                        {t ? (
+                        {tickerData ? (
                           <Typography variant="caption">
-                            {formatPrice(t.low, t.symbol)}
+                            {formatPrice(tickerData.low, tickerData.symbol)}
                           </Typography>
                         ) : (
                           <Skeleton width={60} height={16} animation="wave" />

@@ -1,39 +1,28 @@
 import {
-  Paper,
-  Typography,
   List,
   ListItem,
-  ListItemText,
   ListItemButton,
+  ListItemText,
+  Paper,
   Skeleton,
   Stack,
+  Typography,
 } from "@mui/material"
-import type { TickerData } from "../hooks/useBinanceTicker"
-import { formatPrice, formatPercent, formatVolume } from "../utill"
+import { watchlist } from "../constants"
+import type { TickerStreamDataMap, TickerSymbol } from "../types"
+import { formatPercent, formatPrice, formatVolume } from "../utill"
 
-const watchSymbols = [
-  "SOLUSDT",
-  "DOGEUSDT",
-  "AVAXUSDT",
-  "DOTUSDT",
-  "LTCUSDT",
-  "TRXUSDT",
-  "LINKUSDT",
-  "ATOMUSDT",
-  "ETCUSDT",
-]
-
-interface Props {
-  tickers: Record<string, TickerData>
-  onSelect: (sym: string) => void
-  selectedTicker: string
+interface WatchlistProps {
+  tickers: TickerStreamDataMap
+  onSelect: (sym: TickerSymbol) => void
+  selectedTicker: TickerSymbol
 }
 
-export default function Watchlist({
+const Watchlist: React.FC<WatchlistProps> = ({
   tickers,
   onSelect,
   selectedTicker,
-}: Props) {
+}) => {
   return (
     <Paper
       sx={{
@@ -52,41 +41,41 @@ export default function Watchlist({
       </Typography>
 
       <List disablePadding>
-        {watchSymbols.map((sym) => {
-          const t = tickers[sym]
-          const up = t?.changePct > 0
-
+        {watchlist.map((ticker: TickerSymbol) => {
+          const tickerData = tickers[ticker]
           return (
             <ListItem
-              key={sym}
-              onClick={() => onSelect(sym)}
+              key={ticker}
+              onClick={() => onSelect(ticker)}
               sx={{
                 my: 2,
                 backgroundColor:
-                  selectedTicker === sym ? "#374b6eff" : "#132344",
+                  selectedTicker === ticker ? "#374b6eff" : "#132344",
               }}
             >
               <ListItemButton>
                 <ListItemText
                   primary={
-                    t ? (
-                      sym
+                    tickerData ? (
+                      ticker
                     ) : (
                       <Skeleton width={80} height={24} animation="wave" />
                     )
                   }
                   secondary={
-                    t ? (
+                    tickerData ? (
                       `Price: ${formatPrice(
-                        t.price,
-                        t.symbol
-                      )} (${formatPercent(t.changePct)}) | High: ${formatPrice(
-                        t.high,
-                        t.symbol
+                        tickerData.price,
+                        tickerData.symbol
+                      )} (${formatPercent(
+                        tickerData.changePct
+                      )}) | High: ${formatPrice(
+                        tickerData.high,
+                        tickerData.symbol
                       )} | Low: ${formatPrice(
-                        t.low,
-                        t.symbol
-                      )} | Vol: ${formatVolume(t.volume)}`
+                        tickerData.low,
+                        tickerData.symbol
+                      )} | Vol: ${formatVolume(tickerData.volume)}`
                     ) : (
                       <Stack spacing={0.5}>
                         <Skeleton width="100%" height={16} animation="wave" />
@@ -103,3 +92,4 @@ export default function Watchlist({
     </Paper>
   )
 }
+export default Watchlist

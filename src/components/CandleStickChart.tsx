@@ -18,11 +18,9 @@ import {
   CandlestickElement,
 } from "chartjs-chart-financial"
 import ToggleIntervals from "./ToggleIntervals"
-import type { Interval } from "../constants"
+import type { BinanceCandle, Candle, Interval, TickerSymbol } from "../types"
+import { INTERVALS, TickerNames, TickerPairs } from "../constants"
 
-// -----------------------------
-// Register Chart.js controllers
-// -----------------------------
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -34,45 +32,17 @@ ChartJS.register(
   Legend,
   Colors
 )
-
-// -----------------------------
-// Types
-// -----------------------------
-export type BinanceKline = [
-  number,
-  string,
-  string,
-  string,
-  string,
-  string,
-  number,
-  string,
-  number,
-  string,
-  string,
-  string
-]
-
-interface Candle {
-  x: number // timestamp
-  o: number
-  h: number
-  l: number
-  c: number
-}
-
 interface CandleStickChartProps {
-  symbol: string
+  selectedTicker: TickerSymbol
 }
 
-// -----------------------------
-// Component
-// -----------------------------
-const CandlestickChart: React.FC<CandleStickChartProps> = ({ symbol }) => {
+const CandlestickChart: React.FC<CandleStickChartProps> = ({
+  selectedTicker,
+}) => {
   const [data, setData] = useState<Candle[]>([])
-  const [selectedInterval, setInterval] = useState<Interval>("5m")
+  const [selectedInterval, setInterval] = useState<Interval>(INTERVALS[0])
 
-  const formatCandle = (c: BinanceKline): Candle => ({
+  const formatCandle = (c: BinanceCandle): Candle => ({
     x: c[0],
     o: parseFloat(c[1]),
     h: parseFloat(c[2]),
@@ -80,19 +50,16 @@ const CandlestickChart: React.FC<CandleStickChartProps> = ({ symbol }) => {
     c: parseFloat(c[4]),
   })
 
-  // -----------------------------
-  // Compute dynamic startTime based on interval
-  // -----------------------------
   const getStartTime = (interval: Interval) => {
     const now = new Date()
     let start = new Date()
 
     switch (interval) {
       case "5m":
-        start.setHours(now.getHours() - 8) // last 6 hours for 5m
+        start.setHours(now.getHours() - 8)
         break
       case "30m":
-        start.setDate(now.getDate() - 1) // last 1 day
+        start.setDate(now.getDate() - 1)
         break
       case "1h":
         start.setDate(now.getDate() - 3)
@@ -100,13 +67,13 @@ const CandlestickChart: React.FC<CandleStickChartProps> = ({ symbol }) => {
       case "4h":
       case "6h":
       case "12h":
-        start.setDate(now.getDate() - 15) // last 7 days
+        start.setDate(now.getDate() - 15)
         break
       case "1d":
         start.setMonth(now.getMonth() - 2)
         break
       case "1w":
-        start.setFullYear(now.getFullYear() - 2) // last 2 years
+        start.setFullYear(now.getFullYear() - 2)
         break
       default:
         start.setFullYear(now.getFullYear() - 1)
@@ -115,37 +82,31 @@ const CandlestickChart: React.FC<CandleStickChartProps> = ({ symbol }) => {
     return start.getTime()
   }
 
-  // -----------------------------
-  // Load historical data
-  // -----------------------------
   const loadHistorical = async () => {
+    // Compute dynamic startTime based on interval
     const startTime = getStartTime(selectedInterval)
-    const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${selectedInterval}&startTime=${startTime}&limit=1000`
-
+    const url = `https://api.binance.com/api/v3/klines?symbol=${selectedTicker}&interval=${selectedInterval}&startTime=${startTime}&limit=1000`
+    //candlestick bars for a symbol. candlestick are uniquely identified by their open time.
     const res = await fetch(url)
     if (!res.ok)
       return console.error("Failed to load historical:", res.statusText)
-
-    const klines: BinanceKline[] = await res.json()
+    //todo error alert
+    const klines: BinanceCandle[] = await res.json()
     setData(klines.map(formatCandle))
   }
-
-  // -----------------------------
-  // Open WebSocket for live updates
-  // -----------------------------
   const openWebSocket = () => {
-    const streamName = `${symbol.toLowerCase()}@kline_${selectedInterval}`
+    const streamName = `${selectedTicker.toLowerCase()}@kline_${selectedInterval}`
     const ws = new WebSocket(`wss://stream.binance.com:9443/ws/${streamName}`)
-
+    //The Candlestick Stream push updates to the current klines/candlestick every 250 milliseconds.
     ws.onmessage = (event) => {
       const msg = JSON.parse(event.data)
       const k = msg.k
       const candle: Candle = {
-        x: k.t,
-        o: parseFloat(k.o),
-        h: parseFloat(k.h),
-        l: parseFloat(k.l),
-        c: parseFloat(k.c),
+        x: k.t, // Candlestick start time
+        o: parseFloat(k.o), // Open price
+        h: parseFloat(k.h), // High price
+        l: parseFloat(k.l), // Low price
+        c: parseFloat(k.c), // Close price
       }
 
       setData((prev) => {
@@ -159,20 +120,18 @@ const CandlestickChart: React.FC<CandleStickChartProps> = ({ symbol }) => {
         return newData
       })
     }
-
+    // todo error handling
     ws.onerror = (e) => console.error("WebSocket error:", e)
     return ws
   }
 
   useEffect(() => {
     loadHistorical()
+    // Open WebSocket for live updates
     const ws = openWebSocket()
     return () => ws.close()
-  }, [symbol, selectedInterval])
+  }, [selectedTicker, selectedInterval])
 
-  // -----------------------------
-  // Dynamic time unit based on data range
-  // -----------------------------
   const getTimeUnit = (
     displayData: Candle[]
   ): "minute" | "hour" | "day" | "month" => {
@@ -181,16 +140,16 @@ const CandlestickChart: React.FC<CandleStickChartProps> = ({ symbol }) => {
     const last = displayData[displayData.length - 1].x
     const rangeMs = last - first
 
-    if (rangeMs <= 1000 * 60 * 60) return "minute" // <= 1 hour
-    if (rangeMs <= 1000 * 60 * 60 * 24) return "hour" // <= 1 day
-    if (rangeMs <= 1000 * 60 * 60 * 24 * 31) return "day" // <= 1 month
+    if (rangeMs <= 1000 * 60 * 60) return "minute"
+    if (rangeMs <= 1000 * 60 * 60 * 24) return "hour"
+    if (rangeMs <= 1000 * 60 * 60 * 24 * 31) return "day" //
     return "month"
   }
 
   const chartData = {
     datasets: [
       {
-        label: symbol,
+        label: selectedTicker,
         data,
         type: "candlestick" as const,
         color: { up: "#00b894", down: "#d63031" },
@@ -210,7 +169,7 @@ const CandlestickChart: React.FC<CandleStickChartProps> = ({ symbol }) => {
     scales: {
       x: {
         type: "time",
-        time: { unit: getTimeUnit(data) },
+        time: { unit: getTimeUnit(data) }, //time unit based on data range
         min: data[0]?.x,
         max: data[data.length - 1]?.x,
         ticks: { color: "#EAECEF" },
@@ -235,7 +194,7 @@ const CandlestickChart: React.FC<CandleStickChartProps> = ({ symbol }) => {
   return (
     <Paper sx={{ p: 2 }}>
       <Typography variant="subtitle1" gutterBottom>
-        {symbol} — {selectedInterval} — Candlestick Chart
+        {TickerNames[selectedTicker]}
       </Typography>
       <ToggleIntervals interval={selectedInterval} setInterval={setInterval} />
       <Chart type="candlestick" data={chartData} options={options} />
