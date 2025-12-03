@@ -3,13 +3,13 @@ import { SnackbarProvider } from "notistack"
 import { useState } from "react"
 import CandleStickChart from "./components/CandleStickChart"
 import Watchlist from "./components/Watchlist"
-import { useBinanceTicker } from "./hooks/useBinanceTicker"
+import { useTicketLiveStream } from "./hooks/useTicketLiveStream"
 import type { TickerSymbol } from "./types"
 import { popularTickers } from "./constants"
 import { PopularTickers } from "./components/PopularTickers"
 
 export default function App() {
-  const tickersLiveStream = useBinanceTicker()
+  const tickersLiveStream = useTicketLiveStream()
   const [selectedTicker, setSelected] = useState<TickerSymbol>(
     popularTickers[0]
   )

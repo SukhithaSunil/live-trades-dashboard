@@ -1,10 +1,10 @@
-// src/hooks/useBinanceTicker.ts
 import { enqueueSnackbar } from "notistack"
 import { useEffect, useRef, useState } from "react"
 import { availableTickers, DEFAULT_THRESHOLDS } from "../constants"
 import type { TickerStreamDataMap } from "../types"
+import { Binance_WS } from "../network"
 
-export const useBinanceTicker = (): TickerStreamDataMap => {
+export const useTicketLiveStream = (): TickerStreamDataMap => {
   const [data, setData] = useState<TickerStreamDataMap>({})
   const dataRef = useRef<TickerStreamDataMap>({})
   const isMounted = useRef(false)
@@ -17,16 +17,13 @@ export const useBinanceTicker = (): TickerStreamDataMap => {
   const checkPriceThreshold = (symbol: string, currentPrice: number) => {
     const threshold = DEFAULT_THRESHOLDS[symbol]
     if (!threshold) return
-
     if (threshold.above && currentPrice > threshold.above) {
-      console.log("ABOVE TRIGGER fired")
       enqueueSnackbar(`${symbol} crossed ABOVE ${threshold.above}`, {
         variant: "success",
       })
     }
 
     if (threshold.below && currentPrice < threshold.below) {
-      console.log("BELOW TRIGGER fired")
       enqueueSnackbar(`${symbol} dropped BELOW ${threshold.below}`, {
         variant: "error",
       })
@@ -38,9 +35,7 @@ export const useBinanceTicker = (): TickerStreamDataMap => {
     const streams = availableTickers
       .map((s) => `${s.toLowerCase()}@ticker`)
       .join("/")
-    const ws = new WebSocket(
-      `wss://stream.binance.com:9443/stream?streams=${streams}`
-    )
+    const ws = new WebSocket(`${Binance_WS}stream?streams=${streams}`)
 
     ws.onmessage = (msg) => {
       const parsed = JSON.parse(msg.data)
@@ -61,9 +56,8 @@ export const useBinanceTicker = (): TickerStreamDataMap => {
         },
       }))
     }
-
     return () => ws.close()
-  }, [availableTickers])
+  }, [])
 
   const allDataReady = Object.keys(data).length === availableTickers.length
 
