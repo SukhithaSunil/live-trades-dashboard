@@ -1,8 +1,8 @@
 import * as React from "react"
 import ToggleButton from "@mui/material/ToggleButton"
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
-import { INTERVALS } from "../constants"
-import type { Interval } from "../types"
+import { INTERVALS } from "../../constants"
+import type { Interval } from "../../types"
 
 interface ToggleIntervalsProps {
   interval: Interval

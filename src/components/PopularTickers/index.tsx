@@ -10,9 +10,19 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
-import { popularTickers, TickerPairs } from "../constants"
-import type { TickerStreamDataMap, TickerSymbol } from "../types"
-import { formatPercent, formatPrice } from "../utill"
+import { popularTickers, TickerPairs } from "../../constants"
+import type { TickerStreamDataMap, TickerSymbol } from "../../types"
+import { formatPercent, formatPrice } from "../../util"
+import {
+  cardStyles,
+  cardActionAreaStyles,
+  cardContentStyles,
+  stackStyles,
+  chipStyles,
+  priceStyles,
+  gridContainerStyles,
+  captionStyles,
+} from "./styles"
 
 interface PopularTickersProps {
   tickersLiveStream: TickerStreamDataMap
@@ -20,7 +30,7 @@ interface PopularTickersProps {
   selectedTicker: TickerSymbol
 }
 
-export const PopularTickers: React.FC<PopularTickersProps> = ({
+const PopularTickers: React.FC<PopularTickersProps> = ({
   tickersLiveStream,
   onSelect,
   selectedTicker,
@@ -30,37 +40,19 @@ export const PopularTickers: React.FC<PopularTickersProps> = ({
       {popularTickers.map((ticket) => {
         const tickerData = tickersLiveStream[ticket]
         const up = (tickerData?.changePct ?? 0) > 0
+
         return (
-          <Grid key={ticket} size={{ xs: 6, sm: 3, lg: 3 }}>
-            <Card
-              sx={{
-                backgroundColor:
-                  selectedTicker === ticket ? "#374b6eff" : "#132344",
-              }}
-            >
+          <Grid size={{ xs: 6, sm: 3, lg: 3 }} key={ticket}>
+            <Card sx={cardStyles(selectedTicker === ticket)}>
               <CardActionArea
                 onClick={() => onSelect(ticket)}
-                sx={{
-                  backgroundColor:
-                    selectedTicker === ticket ? "action.selected" : "inherit",
-                }}
+                sx={cardActionAreaStyles(selectedTicker === ticket)}
+                aria-selected={selectedTicker === ticket}
               >
-                <CardContent
-                  sx={{
-                    alignItems: "center",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
+                <CardContent sx={cardContentStyles}>
                   <Stack
-                    direction={{
-                      xs: "column",
-                      sm: "row",
-                    }}
-                    sx={{
-                      alignItems: { xs: "center" },
-                      gap: { xs: 1 },
-                    }}
+                    direction={{ xs: "column", sm: "row" }}
+                    sx={stackStyles}
                   >
                     <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                       {TickerPairs[ticket]}
@@ -73,7 +65,7 @@ export const PopularTickers: React.FC<PopularTickersProps> = ({
                         }
                         color={up ? "success" : "error"}
                         label={formatPercent(tickerData.changePct)}
-                        sx={{ height: 24, fontSize: 12 }}
+                        sx={chipStyles}
                       />
                     ) : (
                       <Skeleton
@@ -86,7 +78,7 @@ export const PopularTickers: React.FC<PopularTickersProps> = ({
                   </Stack>
 
                   {tickerData ? (
-                    <Typography variant="h6" color="darksalmon" sx={{ mt: 1 }}>
+                    <Typography variant="subtitle1" sx={priceStyles}>
                       {tickerData.price}
                     </Typography>
                   ) : (
@@ -97,20 +89,13 @@ export const PopularTickers: React.FC<PopularTickersProps> = ({
                       animation="wave"
                     />
                   )}
-                  <Grid
-                    container
-                    spacing={2}
-                    sx={{ display: { xs: "none", sm: "flex" }, mt: 1 }}
-                  >
+
+                  <Grid container spacing={2} sx={gridContainerStyles}>
                     <Grid>
                       <Stack>
-                        <Typography
-                          variant="caption"
-                          sx={{ color: "text.secondary" }}
-                        >
+                        <Typography variant="caption" sx={captionStyles}>
                           24h High
                         </Typography>
-
                         {tickerData ? (
                           <Typography variant="caption">
                             {formatPrice(tickerData.high, tickerData.symbol)}
@@ -122,13 +107,9 @@ export const PopularTickers: React.FC<PopularTickersProps> = ({
                     </Grid>
                     <Grid>
                       <Stack>
-                        <Typography
-                          variant="caption"
-                          sx={{ color: "text.secondary" }}
-                        >
+                        <Typography variant="caption" sx={captionStyles}>
                           24h Low
                         </Typography>
-
                         {tickerData ? (
                           <Typography variant="caption">
                             {formatPrice(tickerData.low, tickerData.symbol)}
@@ -148,3 +129,5 @@ export const PopularTickers: React.FC<PopularTickersProps> = ({
     </>
   )
 }
+
+export default PopularTickers

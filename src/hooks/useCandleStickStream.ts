@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Binance_API, Binance_WS } from "../network"
 import type { BinanceCandle, Candle, Interval, TickerSymbol } from "../types"
-import { formatCandle, getStartTime } from "../utill"
+import { formatCandle, getStartTime } from "../util"
 interface UseCandleStickStreamProps {
   selectedTicker: TickerSymbol
   selectedInterval: Interval

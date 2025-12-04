@@ -17,10 +17,10 @@ import {
 } from "chartjs-chart-financial"
 import React, { useState } from "react"
 import { Chart } from "react-chartjs-2"
-import { INTERVALS, TickerNames } from "../constants"
-import { useCandleStickStream } from "../hooks/useCandleStickStream"
-import type { Interval, TickerSymbol } from "../types"
-import { formatPriceforChart, getTimeUnit } from "../utill"
+import { INTERVALS, TickerNames } from "../../constants"
+import { useCandleStickStream } from "../../hooks/useCandleStickStream"
+import type { Interval, TickerSymbol } from "../../types"
+import { formatPriceforChart, getTimeUnit } from "../../util"
 import ToggleIntervals from "./ToggleIntervals"
 
 ChartJS.register(
@@ -39,7 +39,7 @@ interface CandleStickChartProps {
   loading: boolean
 }
 
-const CandlestickChart: React.FC<CandleStickChartProps> = ({
+const CandleStickChart: React.FC<CandleStickChartProps> = ({
   selectedTicker,
   loading,
 }) => {
@@ -117,4 +117,4 @@ const CandlestickChart: React.FC<CandleStickChartProps> = ({
   )
 }
 
-export default CandlestickChart
+export default CandleStickChart

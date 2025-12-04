@@ -1,12 +1,10 @@
-import { Container, Grid, Skeleton, Stack } from "@mui/material"
+import { Container, Grid } from "@mui/material"
 import { SnackbarProvider } from "notistack"
 import { useState } from "react"
-import CandleStickChart from "./components/CandleStickChart"
-import Watchlist from "./components/Watchlist"
+import { CandleStickChart, PopularTickers, Watchlist } from "./components"
+import { popularTickers } from "./constants"
 import { useTicketLiveStream } from "./hooks/useTicketLiveStream"
 import type { TickerSymbol } from "./types"
-import { popularTickers } from "./constants"
-import { PopularTickers } from "./components/PopularTickers"
 
 export default function App() {
   const { tickersLiveStream } = useTicketLiveStream()
@@ -31,7 +29,7 @@ export default function App() {
           <Grid size={{ xs: 12, sm: 12, lg: 8 }}>
             <CandleStickChart
               selectedTicker={selectedTicker}
-              loading={Object.keys(tickersLiveStream).length == 0}
+              loading={!tickersLiveStream[selectedTicker]}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
