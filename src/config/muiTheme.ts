@@ -7,7 +7,7 @@ export const muiTheme = createTheme({
       paper: "#111827", // navy panel
     },
     primary: {
-      main: "#F0B90B", // Binance yellow
+      main: "#37342bff", // Binance yellow
       contrastText: "#000",
     },
     secondary: {
@@ -22,7 +22,7 @@ export const muiTheme = createTheme({
     divider: "rgba(255,255,255,0.1)",
     error: { main: "#c54d50" },
     success: { main: "#5fd6a8ff" },
-    warning: { main: "#F0B90B" },
+    warning: { main: "#bb9f42ff" },
   },
 
   typography: {
@@ -49,10 +49,10 @@ export const muiTheme = createTheme({
           padding: "8px 16px",
           color: "#EAECEF",
           transition: "background-color 0.2s",
-          backgroundColor: "#0f254dff", // hover surface
+          backgroundColor: "#0f254dff",
 
           "&:hover": {
-            backgroundColor: "#374b6eff", // hover surface
+            backgroundColor: "#374b6eff",
           },
         },
       },

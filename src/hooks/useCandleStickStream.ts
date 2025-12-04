@@ -25,12 +25,12 @@ export const useCandleStickStream = ({
     setData(klines.map(formatCandle))
   }
   const connectWebSocket = () => {
-    const streamName = `${selectedTicker.toLowerCase()}@kline_${selectedInterval}`
-    const ws = new WebSocket(`${Binance_WS}/ws/${streamName}`)
+    const streamName = `stream?streams=${selectedTicker.toLowerCase()}@kline_${selectedInterval}`
+    const ws = new WebSocket(`${Binance_WS}${streamName}`)
     //The Candlestick Stream push updates to the current klines/candlestick every 250 milliseconds.
     ws.onmessage = (event) => {
       const msg = JSON.parse(event.data)
-      const k = msg.k
+      const k = msg.data.k
       const candle: Candle = {
         x: k.t, // Candlestick start time
         o: parseFloat(k.o), // Open price
@@ -50,15 +50,14 @@ export const useCandleStickStream = ({
         return newData
       })
     }
-    // todo error handling
-    ws.onerror = (e) => console.error("WebSocket error:", e)
+
     return ws
   }
 
   useEffect(() => {
-    getHistoricalData() // Returns candles from  past time
-    const ws = connectWebSocket() // Open WebSocket for live updates
-    return () => ws.close()
+    getHistoricalData() // fetch past candles
+    const ws = connectWebSocket() // open WS
+    ws.close()
   }, [selectedTicker, selectedInterval])
 
   return data

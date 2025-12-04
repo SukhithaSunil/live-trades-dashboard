@@ -68,9 +68,12 @@ export const PopularTickers: React.FC<PopularTickersProps> = ({
                     {tickerData ? (
                       <Chip
                         size="small"
-                        icon={up ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />}
+                        avatar={
+                          up ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />
+                        }
                         color={up ? "success" : "error"}
                         label={formatPercent(tickerData.changePct)}
+                        sx={{ height: 24, fontSize: 12 }}
                       />
                     ) : (
                       <Skeleton

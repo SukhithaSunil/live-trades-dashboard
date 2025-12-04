@@ -1,10 +1,12 @@
 import { enqueueSnackbar } from "notistack"
 import { useEffect, useRef, useState } from "react"
-import { availableTickers, DEFAULT_THRESHOLDS } from "../constants"
-import type { TickerStreamDataMap } from "../types"
+import { availableTickers, DEFAULT_THRESHOLDS, TickerNames } from "../constants"
+import type { TickerStreamDataMap, TickerSymbol } from "../types"
 import { Binance_WS } from "../network"
 
-export const useTicketLiveStream = (): TickerStreamDataMap => {
+export const useTicketLiveStream = (): {
+  tickersLiveStream: TickerStreamDataMap
+} => {
   const [data, setData] = useState<TickerStreamDataMap>({})
   const dataRef = useRef<TickerStreamDataMap>({})
   const isMounted = useRef(false)
@@ -14,19 +16,25 @@ export const useTicketLiveStream = (): TickerStreamDataMap => {
     dataRef.current = data
   }, [data])
 
-  const checkPriceThreshold = (symbol: string, currentPrice: number) => {
+  const checkPriceThreshold = (symbol: TickerSymbol, currentPrice: number) => {
     const threshold = DEFAULT_THRESHOLDS[symbol]
     if (!threshold) return
     if (threshold.above && currentPrice > threshold.above) {
-      enqueueSnackbar(`${symbol} crossed ABOVE ${threshold.above}`, {
-        variant: "success",
-      })
+      enqueueSnackbar(
+        `The last price of ${TickerNames[symbol]} is above ${threshold.above}`,
+        {
+          variant: "success",
+        }
+      )
     }
 
     if (threshold.below && currentPrice < threshold.below) {
-      enqueueSnackbar(`${symbol} dropped BELOW ${threshold.below}`, {
-        variant: "error",
-      })
+      enqueueSnackbar(
+        `The last price of ${TickerNames[symbol]} is below  ${threshold.below}`,
+        {
+          variant: "warning",
+        }
+      )
     }
   }
 
@@ -56,6 +64,17 @@ export const useTicketLiveStream = (): TickerStreamDataMap => {
         },
       }))
     }
+    ws.onerror = () => {
+      enqueueSnackbar("Network issue detected — attempting to recover…", {
+        variant: "info",
+      })
+    }
+
+    ws.onclose = () => {
+      enqueueSnackbar(" Connection lost…", {
+        variant: "info",
+      })
+    }
     return () => ws.close()
   }, [])
 
@@ -66,22 +85,21 @@ export const useTicketLiveStream = (): TickerStreamDataMap => {
     if (!allDataReady || isMounted.current) return
 
     isMounted.current = true
-    console.log("All availableTickers loaded → running initial threshold check")
 
     // Run threshold check immediately once
     Object.entries(dataRef.current).forEach(([symbol, ticker]) => {
-      checkPriceThreshold(symbol, ticker.price)
+      checkPriceThreshold(symbol as TickerSymbol, ticker.price)
     })
 
     // Then start interval for periodic checks
     const interval = setInterval(() => {
       Object.entries(dataRef.current).forEach(([symbol, ticker]) => {
-        checkPriceThreshold(symbol, ticker.price)
+        checkPriceThreshold(symbol as TickerSymbol, ticker.price)
       })
     }, 60_000) // every 1 min
 
     return () => clearInterval(interval)
   }, [allDataReady])
 
-  return data
+  return { tickersLiveStream: data }
 }

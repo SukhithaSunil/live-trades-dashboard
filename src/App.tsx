@@ -1,4 +1,4 @@
-import { Container, Grid } from "@mui/material"
+import { Container, Grid, Skeleton, Stack } from "@mui/material"
 import { SnackbarProvider } from "notistack"
 import { useState } from "react"
 import CandleStickChart from "./components/CandleStickChart"
@@ -9,14 +9,14 @@ import { popularTickers } from "./constants"
 import { PopularTickers } from "./components/PopularTickers"
 
 export default function App() {
-  const tickersLiveStream = useTicketLiveStream()
+  const { tickersLiveStream } = useTicketLiveStream()
   const [selectedTicker, setSelected] = useState<TickerSymbol>(
     popularTickers[0]
   )
-
   return (
     <SnackbarProvider
-      maxSnack={5}
+      maxSnack={3}
+      hideIconVariant
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       autoHideDuration={3000}
       preventDuplicate
@@ -29,9 +29,12 @@ export default function App() {
             selectedTicker={selectedTicker}
           />
           <Grid size={{ xs: 12, sm: 12, lg: 8 }}>
-            <CandleStickChart selectedTicker={selectedTicker} />
+            <CandleStickChart
+              selectedTicker={selectedTicker}
+              loading={Object.keys(tickersLiveStream).length == 0}
+            />
           </Grid>
-          <Grid size={{ xs: 12, sm: 4, lg: 4 }}>
+          <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
             <Watchlist
               tickers={tickersLiveStream}
               onSelect={setSelected}

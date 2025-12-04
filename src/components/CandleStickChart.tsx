@@ -1,4 +1,4 @@
-import { Paper, Typography } from "@mui/material"
+import { Paper, Skeleton, Stack, Typography } from "@mui/material"
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -36,10 +36,12 @@ ChartJS.register(
 )
 interface CandleStickChartProps {
   selectedTicker: TickerSymbol
+  loading: boolean
 }
 
 const CandlestickChart: React.FC<CandleStickChartProps> = ({
   selectedTicker,
+  loading,
 }) => {
   const [selectedInterval, setInterval] = useState<Interval>(INTERVALS[0])
   const data = useCandleStickStream({
@@ -88,11 +90,29 @@ const CandlestickChart: React.FC<CandleStickChartProps> = ({
 
   return (
     <Paper sx={{ p: 2 }}>
-      <Typography variant="subtitle1" gutterBottom>
-        {TickerNames[selectedTicker]}
-      </Typography>
-      <ToggleIntervals interval={selectedInterval} setInterval={setInterval} />
-      <Chart type="candlestick" data={chartData} options={options} />
+      {loading ? (
+        <Stack>
+          <Skeleton width="100%" height={28} sx={{ mt: 1 }} animation="wave" />
+          <Skeleton width="100%" height={500} animation="wave" />
+        </Stack>
+      ) : (
+        <>
+          <Typography variant="subtitle1" gutterBottom>
+            {TickerNames[selectedTicker]}
+          </Typography>
+          {data[data.length - 1] && (
+            <Typography variant="body2" sx={{ mb: 1 }}>
+              {`O: ${data[data.length - 1].o}  H: ${data[data.length - 1].h}  L:
+          ${data[data.length - 1].l}  C: ${data[data.length - 1].c}`}
+            </Typography>
+          )}
+          <ToggleIntervals
+            interval={selectedInterval}
+            setInterval={setInterval}
+          />
+          <Chart type="candlestick" data={chartData} options={options} />
+        </>
+      )}
     </Paper>
   )
 }

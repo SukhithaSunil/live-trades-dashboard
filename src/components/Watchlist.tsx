@@ -8,7 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
-import { watchlist } from "../constants"
+import { TickerPairs, watchlist } from "../constants"
 import type { TickerStreamDataMap, TickerSymbol } from "../types"
 import { formatPercent, formatPrice, formatVolume } from "../utill"
 
@@ -27,8 +27,22 @@ const Watchlist: React.FC<WatchlistProps> = ({
     <Paper
       sx={{
         p: 2,
-        height: 500,
+        height: 550,
         overflowY: "auto",
+        "&::-webkit-scrollbar": {
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-track": {
+          background: "#0d1b3a",
+          borderRadius: "4px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          backgroundColor: "#374b6eff",
+          borderRadius: "4px",
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+          backgroundColor: "#566fae",
+        },
       }}
     >
       <Typography
@@ -57,7 +71,7 @@ const Watchlist: React.FC<WatchlistProps> = ({
                 <ListItemText
                   primary={
                     tickerData ? (
-                      ticker
+                      TickerPairs[ticker]
                     ) : (
                       <Skeleton width={80} height={24} animation="wave" />
                     )

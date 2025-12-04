@@ -1,4 +1,4 @@
-import type { TickerSymbol } from "./types"
+import type { PriceThreshold, TickerSymbol } from "./types"
 
 export const options = ["1m", "5m", "1h", "1d"]
 export const availableTickers = [
@@ -53,35 +53,6 @@ export const watchlist: TickerSymbol[] = [
   "ETCUSDT",
 ] as const
 
-export const PopularPairs = {
-  BTCUSDT: "BTC / USDT",
-  ETHUSDT: "ETH / USDT",
-  BNBUSDT: "BNB / USDT",
-  XRPUSDT: "XRP / USDT",
-} as const
-
-export type PopularPairKeys = keyof typeof PopularPairs
-export const WatchSymbolsPairs = {
-  ADAUSDT: "ADA / USDT",
-  SOLUSDT: "SOL / USDT",
-  DOGEUSDT: "DOGE / USDT",
-  AVAXUSDT: "AVAX / USDT",
-  DOTUSDT: "DOT / USDT",
-  LTCUSDT: "LTC / USDT",
-  TRXUSDT: "TRX / USDT",
-  ETCUSDT: "ETC / USDT",
-} as const
-export type WatchPairKeys = keyof typeof WatchSymbolsPairs
-export const watchSymbols: WatchPairKeys[] = [
-  "ADAUSDT",
-  "SOLUSDT",
-  "DOGEUSDT",
-  "AVAXUSDT",
-  "DOTUSDT",
-  "LTCUSDT",
-  "TRXUSDT",
-  "ETCUSDT",
-]
 export const TickerNames: Record<TickerSymbol, string> = {
   BTCUSDT: "Bitcoin",
   ETHUSDT: "Ethereum",
@@ -109,12 +80,7 @@ export const INTERVALS = [
   "1d",
   "1w",
 ] as const
-export interface PriceThreshold {
-  [symbol: string]: {
-    above?: number
-    below?: number
-  }
-}
+
 export const DEFAULT_THRESHOLDS: PriceThreshold = {
   BTCUSDT: { above: 86200, below: 86600 },
   ETHUSDT: { above: 2500 },

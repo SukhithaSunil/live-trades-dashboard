@@ -34,3 +34,9 @@ export type BinanceCandle = [
   string, // Taker buy quote asset volume
   string // Unused field, ignore.
 ]
+export type PriceThreshold = {
+  [S in TickerSymbol]?: {
+    above?: number
+    below?: number
+  }
+}
