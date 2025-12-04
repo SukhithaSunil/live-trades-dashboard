@@ -5,9 +5,7 @@
 
 ## 📌 Quick Overview
 A **real-time trading dashboard** built with **React + TypeScript**.  
-Monitor live ticker prices, view **multi-timeframe candlestick charts**, and switch between multiple financial instruments seamlessly.  
-
-This project integrates **REST API** for historical data and **WebSocket** for real-time updates.
+Monitor live ticker prices, view multi-timeframe candlestick charts, and switch between multiple financial instruments seamlessly.
 
 ---
 
@@ -25,7 +23,7 @@ This project integrates **REST API** for historical data and **WebSocket** for r
 
 ## ✨ Features
 - 🟢 **Live Ticker Prices** – Real-time price updates for multiple symbols.  
-- 📊 **Interactive Charts** – Candlestick charts using Chart.js / Recharts. 
+- 📊 **Interactive Charts** – Candlestick charts using Chart.js. 
 - 🔄 **Switch Tickers** – Seamlessly switch between financial instruments.  
 - ⏳ **Historical Data** – Fetch past candle data for charting.  
 - 🌐 **WebSocket Integration** – Real-time data streaming for live updates.  
@@ -53,11 +51,12 @@ src/
 ├── assets/           # Images, icons, screenshots
 ├── components/       # UI components (TickerList, Chart, etc.)
 ├── hooks/            # Custom hooks (WebSocket, API)
-├── network/          # API & WebSocket utilities
-├── types/            # TypeScript types and interfaces
-├── util/            # Helper functions (formatting, timestamps)
+├── config/          # theming
+├── types.ts            # TypeScript types and interfaces
+├── util.ts            # Helper functions (formatting, timestamps)
 ├── App.tsx           # Main app entry
-└── index.tsx         # ReactDOM render
+└── constants.tsx         # constants
+└── main.tsx         # ReactDOM render
 ````
 
 **Folder Structure Diagram:**
@@ -81,7 +80,7 @@ A --> I[index.tsx]
 ### Prerequisites
 
 * Node.js >= 18
-* npm or yarn
+* npm
 
 ### Installation
 
@@ -125,10 +124,3 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 * **GitHub:** [[https://github.com/SukhithaSunil](https://github.com/SukhithaSunil)]
 
 ---
-
----
-
-If you want, I can **create the actual `README.md` file for download** and give you a direct file link so you can drop it in your project immediately.  
-
-Do you want me to do that?
-```
