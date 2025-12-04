@@ -26,7 +26,6 @@ export const chipStyles: SxProps<Theme> = {
 
 export const priceStyles: SxProps<Theme> = {
   mt: 1,
-  color: "darksalmon",
 }
 
 export const gridContainerStyles: SxProps<Theme> = {

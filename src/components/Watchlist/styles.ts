@@ -1,4 +1,5 @@
-import type { SxProps, Theme } from "@mui/material"
+import { styled, type SxProps, type Theme } from "@mui/material"
+import MovingIcon from "@mui/icons-material/Moving"
 
 export const container: SxProps<Theme> = {
   p: 2,
@@ -24,3 +25,15 @@ export const listItemStyles = (selected: boolean): SxProps<Theme> => ({
   backgroundColor: selected ? "#374b6eff" : "#132344",
   borderRadius: 1,
 })
+
+export const DownMovingIcon = styled(MovingIcon)(({ theme }) => ({
+  transform: "rotate(180deg)",
+  color: theme.palette.error.main,
+}))
+
+export const title: SxProps<Theme> = {
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  gap: 1,
+}

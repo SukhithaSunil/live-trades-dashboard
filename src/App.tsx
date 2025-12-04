@@ -34,7 +34,7 @@ export default function App() {
           </Grid>
           <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
             <Watchlist
-              tickers={tickersLiveStream}
+              tickersLiveStream={tickersLiveStream}
               onSelect={setSelected}
               selectedTicker={selectedTicker}
             />

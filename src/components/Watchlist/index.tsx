@@ -10,17 +10,17 @@ import {
 } from "@mui/material"
 import { TickerPairs, watchlist } from "../../constants"
 import type { TickerStreamDataMap, TickerSymbol } from "../../types"
-import { formatPercent, formatPrice, formatVolume } from "../../util"
-import { container, listItemStyles } from "./styles"
-
+import { formatPrice, formatVolume } from "../../util"
+import PriceChange from "../PriceChange"
+import { container, listItemStyles, title } from "./styles"
 interface WatchlistProps {
-  tickers: TickerStreamDataMap
+  tickersLiveStream: TickerStreamDataMap
   onSelect: (sym: TickerSymbol) => void
   selectedTicker: TickerSymbol
 }
 
 const Watchlist: React.FC<WatchlistProps> = ({
-  tickers,
+  tickersLiveStream,
   onSelect,
   selectedTicker,
 }) => {
@@ -34,10 +34,10 @@ const Watchlist: React.FC<WatchlistProps> = ({
       >
         Watchlist
       </Typography>
-
       <List disablePadding>
         {watchlist.map((ticker: TickerSymbol) => {
-          const tickerData = tickers[ticker]
+          const tickerData = tickersLiveStream[ticker]
+          const up = (tickerData?.changePct ?? 0) > 0
           return (
             <ListItem
               key={ticker}
@@ -50,7 +50,15 @@ const Watchlist: React.FC<WatchlistProps> = ({
                 <ListItemText
                   primary={
                     tickerData ? (
-                      TickerPairs[ticker]
+                      <Stack sx={title}>
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ fontWeight: "bold" }}
+                        >
+                          {TickerPairs[ticker]}
+                        </Typography>
+                        <PriceChange up={up} changePct={tickerData.changePct} />
+                      </Stack>
                     ) : (
                       <Skeleton width={80} height={24} animation="wave" />
                     )
@@ -61,8 +69,7 @@ const Watchlist: React.FC<WatchlistProps> = ({
                         <Stack direction="row" flexWrap="wrap" spacing={1}>
                           <Typography variant="body2">
                             Price:{" "}
-                            {formatPrice(tickerData.price, tickerData.symbol)} (
-                            {formatPercent(tickerData.changePct)})
+                            {formatPrice(tickerData.price, tickerData.symbol)}
                           </Typography>
                           <Typography variant="body2">
                             High:{" "}
