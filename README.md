@@ -11,7 +11,7 @@ It combines:
 - 📡 **REST API** → for fetching historical candlestick (kline) data  
 - 🔌 **WebSockets** → for streaming live price & candle updates
 
-  <img width="950" height="473" alt="image" src="https://github.com/user-attachments/assets/c5096c41-d269-4c30-b88c-545aca883f58" />
+<img width="951" height="468" alt="final" src="https://github.com/user-attachments/assets/85b4a19c-d632-4faa-b1b3-9a52ca2be375" />
 
 ---
 
