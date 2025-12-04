@@ -111,51 +111,46 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 🔹 Binance REST API (Historical Data)
 
-Used for fetching historical candlestick (kline) data:
-
-GET /api/v3/klines?symbol=BTCUSDT&interval=5m&startTime=1764806602940&limit=1000
+* Used for fetching historical candlestick (kline) data: GET /api/v3/klines?symbol=BTCUSDT&interval=5m&startTime=1764806602940&limit=1000
 
 🔹 Binance WebSocket Streams (Live Updates)
 
-Real-time candlestick streaming:
-
-wss://stream.binance.com:9443/stream?streams=btcusdt@kline_5m
+ * Real-time candlestick streaming: wss://stream.binance.com:9443/stream?streams=btcusdt@kline_5m
 
 🔹 Combined Streams (Multiple Tickers)
 
-Subscribe to multiple tickers in a single WebSocket connection:
-
-wss://stream.binance.com:9443/stream?streams=
-btcusdt@ticker/
-ethusdt@ticker/
-bnbusdt@ticker/
-xrpusdt@ticker/
-adausdt@ticker/
-solusdt@ticker/
-dogeusdt@ticker/
-avaxusdt@ticker/
-dotusdt@ticker/
-ltcusdt@ticker/
-trxusdt@ticker/
-linkusdt@ticker/
-atomusdt@ticker/
-etcusdt@ticker
+ * Subscribe to multiple tickers in a single WebSocket connection: wss://stream.binance.com:9443/stream?streams=
+  btcusdt@ticker/
+  ethusdt@ticker/
+  bnbusdt@ticker/
+  xrpusdt@ticker/
+  adausdt@ticker/
+  solusdt@ticker/
+  dogeusdt@ticker/
+  avaxusdt@ticker/
+  dotusdt@ticker/
+  ltcusdt@ticker/
+  trxusdt@ticker/
+  linkusdt@ticker/
+  atomusdt@ticker/
+  etcusdt@ticker
 
 ---
 
 
 ## 📚 References
 
-REST API Docs (Klines):
-https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#klinecandlestick-data
+🔹  REST API Docs (Klines):
+ * https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#klinecandlestick-data
 
-WebSocket Streams:
-https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams
+🔹 WebSocket Streams:
+ * https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams
 
-Official Kline/Candlestick Stream Docs:
-https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-streams
-
-chartjs-chart-financial: https://www.chartjs.org/chartjs-chart-financial/
+🔹 Official Kline/Candlestick Stream Docs:
+ * https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-streams
+   
+🔹 Candlestick Chart
+ * chartjs-chart-financial: https://www.chartjs.org/chartjs-chart-financial/
 
 ---
 
