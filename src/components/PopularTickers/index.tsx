@@ -1,10 +1,7 @@
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward"
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"
 import {
   Card,
   CardActionArea,
   CardContent,
-  Chip,
   Grid,
   Skeleton,
   Stack,
@@ -12,16 +9,16 @@ import {
 } from "@mui/material"
 import { popularTickers, TickerPairs } from "../../constants"
 import type { TickerStreamDataMap, TickerSymbol } from "../../types"
-import { formatPercent, formatPrice } from "../../util"
+import { formatPrice } from "../../util"
+import PriceChange from "../PriceChange"
 import {
-  cardStyles,
+  captionStyles,
   cardActionAreaStyles,
   cardContentStyles,
-  stackStyles,
-  chipStyles,
-  priceStyles,
+  cardStyles,
   gridContainerStyles,
-  captionStyles,
+  priceStyles,
+  stackStyles,
 } from "./styles"
 
 interface PopularTickersProps {
@@ -58,15 +55,7 @@ const PopularTickers: React.FC<PopularTickersProps> = ({
                       {TickerPairs[ticket]}
                     </Typography>
                     {tickerData ? (
-                      <Chip
-                        size="small"
-                        avatar={
-                          up ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />
-                        }
-                        color={up ? "success" : "error"}
-                        label={formatPercent(tickerData.changePct)}
-                        sx={chipStyles}
-                      />
+                      <PriceChange up={up} changePct={tickerData.changePct} />
                     ) : (
                       <Skeleton
                         width={60}
