@@ -9,7 +9,10 @@ The dashboard displays **live ticker prices**, **multi-timeframe candlestick cha
 
 It combines:
 - 📡 **REST API** → for fetching historical candlestick (kline) data  
-- 🔌 **WebSockets** → for streaming live price & candle updates  
+- 🔌 **WebSockets** → for streaming live price & candle updates
+
+  <img width="950" height="473" alt="image" src="https://github.com/user-attachments/assets/c5096c41-d269-4c30-b88c-545aca883f58" />
+
 ---
 
 ## 📑 Table of Contents
