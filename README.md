@@ -105,34 +105,61 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
-🌐 API & WebSocket Usage
+
+
+## 🌐 API & WebSocket Usage
+
 🔹 Binance REST API (Historical Data)
 
-Used for fetching historical candlestick data:
+Used for fetching historical candlestick (kline) data:
 
 GET /api/v3/klines?symbol=BTCUSDT&interval=5m&startTime=1764806602940&limit=1000
 
-
 🔹 Binance WebSocket Streams (Live Updates)
 
-Used for real-time streaming of candlesticks:
+Real-time candlestick streaming:
+
 wss://stream.binance.com:9443/stream?streams=btcusdt@kline_5m
 
-combined streams for multiple tickers:
+🔹 Combined Streams (Multiple Tickers)
 
-wss://stream.binance.com:9443/stream?streams=btcusdt@ticker/ethusdt@ticker/bnbusdt@ticker/xrpusdt@ticker/adausdt@ticker/solusdt@ticker/dogeusdt@ticker/avaxusdt@ticker/dotusdt@ticker/ltcusdt@ticker/trxusdt@ticker/linkusdt@ticker/atomusdt@ticker/etcusdt@ticker
+Subscribe to multiple tickers in a single WebSocket connection:
 
-These power the live UI updates in the dashboard.
+wss://stream.binance.com:9443/stream?streams=
+btcusdt@ticker/
+ethusdt@ticker/
+bnbusdt@ticker/
+xrpusdt@ticker/
+adausdt@ticker/
+solusdt@ticker/
+dogeusdt@ticker/
+avaxusdt@ticker/
+dotusdt@ticker/
+ltcusdt@ticker/
+trxusdt@ticker/
+linkusdt@ticker/
+atomusdt@ticker/
+etcusdt@ticker
 
 ---
 
-📚 References
-🔹**REST API Docs:** [api/v3/klines](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#klinecandlestick-data)
-🔹**WebSocket Streams:** https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#klinecandlestick-data
-                        https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams
-🔹**Kline/Candlestick Streams:** https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-streams  
-🔹**chartjs-chart-financial:** https://www.chartjs.org/chartjs-chart-financial/
 
+## 📚 References
+
+REST API Docs (Klines):
+https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#klinecandlestick-data
+
+WebSocket Streams:
+https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams
+
+Official Kline/Candlestick Stream Docs:
+https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-streams
+
+chartjs-chart-financial: https://www.chartjs.org/chartjs-chart-financial/
+
+---
+
+🔹 Extra Resources
 ---
 
 ## 🚧 Improvements & Roadmap
