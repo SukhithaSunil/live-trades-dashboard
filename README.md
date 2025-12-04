@@ -93,7 +93,7 @@ A --> I[index.tsx]
 ### Installation
 
 ```bash
-git clone https://github.com/yourusername/live-trades-dashboard.git
+git clone https://github.com/SukhithaSunil/live-trades-dashboard.git
 cd live-trades-dashboard
 npm install
 ```
